@@ -91,7 +91,7 @@ const register = asyncHandler(async (req, res) => {
       .status(200)
       .json({ success: true, message: "Verification code send to your email" });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res
       .status(500)
       .json({ success: false, message: `Error registering` });
@@ -199,5 +199,13 @@ const logout = asyncHandler(async (req, res) => {
   }
 });
 
+const profile = asyncHandler(async (req, res) => {
+  try {
+    return res.status(200).json(req.user)
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error getting Profile" });
+  }
+});
 
-export { register, login, verifyOtp,logout };
+export { register, login, verifyOtp, logout,profile };

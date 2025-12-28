@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import connectDB from "./db/index.js";
 import userRoutes from "./routes/user.route.js";
+import listingRoutes from "./routes/listing.route.js";
 import cors from "cors";
 
 dotenv.config({
@@ -30,6 +31,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/listing", listingRoutes);
 
 
 app.listen(PORT,'0.0.0.0', () => {
