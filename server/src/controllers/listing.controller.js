@@ -80,9 +80,6 @@ const createListing = asyncHandler(async (req, res) => {
     }
   }
 
-
-
-
   if (category) {
     const categoryDoc = await Category.findById(category).lean();
     if (!categoryDoc || !categoryDoc.isActive) {
@@ -106,7 +103,7 @@ const createListing = asyncHandler(async (req, res) => {
     description,
     type,
     category,
-    images:updatedImages,
+    images: updatedImages,
     price,
     priceUnit,
     deliveryMode,
@@ -118,6 +115,14 @@ const createListing = asyncHandler(async (req, res) => {
     message: "Listing created successfully",
     listing,
   });
+});
+
+const browseListing = asyncHandler(async (req, res) => {
+  try {
+    
+  } catch (error) {
+    res.status(500).json({ message: "error getting messages" });
+  }
 });
 
 export { createListing };
