@@ -1,0 +1,415 @@
+const listings = [
+  // -------------------- ITEMS --------------------
+  {
+    owner: "694da8eff12ddeec46013780",
+    type: "ITEM",
+    title: "DeWalt 20V Cordless Drill Kit",
+    description:
+      "DeWalt 20V drill/driver with 2 batteries + charger. Clean condition, strong torque for wood/metal. Great for DIY and small jobs.",
+    category: "694f4139d1b429711dcb65ef", // Power Tools
+    images: [],
+    price: 15,
+    priceUnit: "DAY",
+    deliveryMode: "PICKUP",
+    city: "toronto",
+    status: "ACTIVE",
+    avgRating: 4.6,
+    ratingCount: 14,
+  },
+  {
+    owner: "694dfb6fc838697b9e32754b",
+    type: "ITEM",
+    title: "Professional Hand Tool Set (150 pcs)",
+    description:
+      "Complete hand tool set: wrenches, sockets, screwdrivers, pliers, bits. Perfect for home repairs and basic automotive work.",
+    category: "694f4139d1b429711dcb65f0", // Hand Tools
+    images: [],
+    price: 12,
+    priceUnit: "DAY",
+    deliveryMode: "PICKUP",
+    city: "scarborough",
+    status: "ACTIVE",
+    avgRating: 4.4,
+    ratingCount: 9,
+  },
+  {
+    owner: "694dfc15c838697b9e32754f",
+    type: "ITEM",
+    title: "Electric Lawn Trimmer + Leaf Blower",
+    description:
+      "Lightweight electric trimmer plus compact leaf blower. Great for small yards and quick cleanups. Easy to use.",
+    category: "694f4139d1b429711dcb65f1", // Gardening Tools
+    images: [],
+    price: 18,
+    priceUnit: "DAY",
+    deliveryMode: "DROPOFF",
+    city: "toronto",
+    status: "ACTIVE",
+    avgRating: 4.2,
+    ratingCount: 6,
+  },
+  {
+    owner: "694e12fc80e065eae14dd709",
+    type: "ITEM",
+    title: "Concrete Mixer (Portable)",
+    description:
+      "Portable concrete mixer for small construction jobs. Ideal for patios, posts, and repairs. Easy to transport.",
+    category: "694f4139d1b429711dcb65f2", // Construction Equipment
+    images: [],
+    price: 55,
+    priceUnit: "DAY",
+    deliveryMode: "DELIVERY",
+    city: "north york",
+    status: "ACTIVE",
+    avgRating: 4.8,
+    ratingCount: 5,
+  },
+  {
+    owner: "6951cfdab7d7f83c236dc230",
+    type: "ITEM",
+    title: "Car Jack + Tire Change Kit",
+    description:
+      "Hydraulic car jack, wheel wrench, tire inflator, and emergency kit. Good for road trips and quick tire changes.",
+    category: "694f4139d1b429711dcb65f3", // Automotive Tools
+    images: [],
+    price: 10,
+    priceUnit: "DAY",
+    deliveryMode: "PICKUP",
+    city: "mississauga",
+    status: "ACTIVE",
+    avgRating: 4.1,
+    ratingCount: 8,
+  },
+  {
+    owner: "6951d049b7d7f83c236dc234",
+    type: "ITEM",
+    title: "Laser Measuring Tool (100m)",
+    description:
+      "Accurate laser measuring tool up to 100m with digital display. Perfect for renovation, furniture fitting, and layouts.",
+    category: "694f4139d1b429711dcb65f4", // Measuring Tools
+    images: [],
+    price: 9,
+    priceUnit: "DAY",
+    deliveryMode: "PICKUP",
+    city: "brampton",
+    status: "ACTIVE",
+    avgRating: 4.7,
+    ratingCount: 11,
+  },
+  {
+    owner: "694da8eff12ddeec46013780",
+    type: "ITEM",
+    title: "Canon DSLR Camera Kit (Body + Lens)",
+    description:
+      "Canon DSLR with standard zoom lens. Great for portraits and events. Includes strap and SD card. No drops, clean sensor.",
+    category: "694f4139d1b429711dcb65f5", // Camera Equipment
+    images: [],
+    price: 60,
+    priceUnit: "DAY",
+    deliveryMode: "DELIVERY",
+    city: "toronto",
+    status: "ACTIVE",
+    avgRating: 4.9,
+    ratingCount: 21,
+  },
+  {
+    owner: "694dfb6fc838697b9e32754b",
+    type: "ITEM",
+    title: "Portable PA Speaker + Wireless Mic",
+    description:
+      "Portable PA speaker with wireless microphone. Good for announcements, small events, and presentations.",
+    category: "694f4139d1b429711dcb65f6", // Audio Equipment
+    images: [],
+    price: 35,
+    priceUnit: "DAY",
+    deliveryMode: "DROPOFF",
+    city: "scarborough",
+    status: "ACTIVE",
+    avgRating: 4.3,
+    ratingCount: 7,
+  },
+  {
+    owner: "694dfc15c838697b9e32754f",
+    type: "ITEM",
+    title: "LED Softbox Lighting Kit (2 lights)",
+    description:
+      "Softbox lighting kit for photography/video. Adjustable brightness, diffusers included. Great for content creation.",
+    category: "694f4139d1b429711dcb65f7", // Lighting Equipment
+    images: [],
+    price: 25,
+    priceUnit: "DAY",
+    deliveryMode: "PICKUP",
+    city: "toronto",
+    status: "ACTIVE",
+    avgRating: 4.5,
+    ratingCount: 10,
+  },
+  {
+    owner: "694e12fc80e065eae14dd709",
+    type: "ITEM",
+    title: "4K Action Camera + Accessories",
+    description:
+      "4K action camera with mounts, waterproof case, and extra batteries. Perfect for travel and sports.",
+    category: "694f4139d1b429711dcb65f8", // Video Equipment
+    images: [],
+    price: 20,
+    priceUnit: "DAY",
+    deliveryMode: "DELIVERY",
+    city: "north york",
+    status: "ACTIVE",
+    avgRating: 4.0,
+    ratingCount: 4,
+  },
+  {
+    owner: "6951cfdab7d7f83c236dc230",
+    type: "ITEM",
+    title: "1080p Projector + 100-inch Screen",
+    description:
+      "HD projector with HDMI support and a 100-inch screen. Great for movie night, sports, and presentations.",
+    category: "694f4139d1b429711dcb65f9", // Projectors
+    images: [],
+    price: 40,
+    priceUnit: "DAY",
+    deliveryMode: "DELIVERY",
+    city: "mississauga",
+    status: "ACTIVE",
+    avgRating: 4.6,
+    ratingCount: 12,
+  },
+  {
+    owner: "6951d049b7d7f83c236dc234",
+    type: "ITEM",
+    title: "Gaming Console (PS5) + 2 Controllers",
+    description:
+      "PS5 with 2 controllers. Great condition. Perfect for weekend rentals and parties.",
+    category: "694f4139d1b429711dcb65fb", // Gaming Consoles
+    images: [],
+    price: 45,
+    priceUnit: "DAY",
+    deliveryMode: "PICKUP",
+    city: "brampton",
+    status: "ACTIVE",
+    avgRating: 4.8,
+    ratingCount: 17,
+  },
+  {
+    owner: "694da8eff12ddeec46013780",
+    type: "ITEM",
+    title: "Event Tent / Canopy (10x10) + Weights",
+    description:
+      "10x10 canopy tent with sidewalls and weights. Perfect for outdoor events and markets.",
+    category: "694f4139d1b429711dcb65fe", // Tents & Canopies
+    images: [],
+    price: 35,
+    priceUnit: "DAY",
+    deliveryMode: "DROPOFF",
+    city: "toronto",
+    status: "ACTIVE",
+    avgRating: 4.4,
+    ratingCount: 8,
+  },
+  {
+    owner: "694dfb6fc838697b9e32754b",
+    type: "ITEM",
+    title: "Party Tables & Chairs (Set: 2 tables, 12 chairs)",
+    description:
+      "Foldable tables and chairs for birthdays, small weddings, and backyard parties. Clean and sturdy.",
+    category: "694f4139d1b429711dcb65ff", // Tables & Chairs
+    images: [],
+    price: 55,
+    priceUnit: "DAY",
+    deliveryMode: "DELIVERY",
+    city: "scarborough",
+    status: "ACTIVE",
+    avgRating: 4.7,
+    ratingCount: 13,
+  },
+
+  // -------------------- SERVICES --------------------
+  {
+    owner: "694dfc15c838697b9e32754f",
+    type: "SERVICE",
+    title: "Deep House Cleaning (Hourly)",
+    description:
+      "Deep cleaning for apartments and houses. Includes kitchen + washroom focus. Bring my own supplies if needed.",
+    category: "694f4139d1b429711dcb6601", // Cleaning Services
+    images: [],
+    price: 30,
+    priceUnit: "HOUR",
+    deliveryMode: "DELIVERY", // service can still be “DELIVERY” in your enum (you’ll interpret as travel)
+    city: "toronto",
+    status: "ACTIVE",
+    avgRating: 4.9,
+    ratingCount: 31,
+  },
+  {
+    owner: "694e12fc80e065eae14dd709",
+    type: "SERVICE",
+    title: "Moving Help (2 People)",
+    description:
+      "Help with loading/unloading, lifting, and organizing. Fast work, careful handling. Minimum 2 hours.",
+    category: "694f4139d1b429711dcb6602", // Moving Help
+    images: [],
+    price: 50,
+    priceUnit: "HOUR",
+    deliveryMode: "DROPOFF",
+    city: "north york",
+    status: "ACTIVE",
+    avgRating: 4.6,
+    ratingCount: 19,
+  },
+  {
+    owner: "6951cfdab7d7f83c236dc230",
+    type: "SERVICE",
+    title: "Handyman Service (General Fixes)",
+    description:
+      "Minor repairs: shelves, curtain rods, door alignment, patching holes, basic installations. Tools included.",
+    category: "694f4139d1b429711dcb6603", // Handyman Services
+    images: [],
+    price: 35,
+    priceUnit: "HOUR",
+    deliveryMode: "DROPOFF",
+    city: "mississauga",
+    status: "ACTIVE",
+    avgRating: 4.5,
+    ratingCount: 15,
+  },
+  {
+    owner: "6951d049b7d7f83c236dc234",
+    type: "SERVICE",
+    title: "Plumbing Help (Basic Repairs)",
+    description:
+      "Fix leaky taps, replace faucets, unclog sinks, toilet issues. Transparent pricing, quick response.",
+    category: "694f4139d1b429711dcb6604", // Plumbing Services
+    images: [],
+    price: 120,
+    priceUnit: "JOB",
+    deliveryMode: "DROPOFF",
+    city: "brampton",
+    status: "ACTIVE",
+    avgRating: 4.2,
+    ratingCount: 10,
+  },
+  {
+    owner: "694da8eff12ddeec46013780",
+    type: "SERVICE",
+    title: "Electrical Service (Small Jobs)",
+    description:
+      "Light fixture replacement, switch/outlet change, basic troubleshooting. Safe and clean work.",
+    category: "694f4139d1b429711dcb6605", // Electrical Services
+    images: [],
+    price: 140,
+    priceUnit: "JOB",
+    deliveryMode: "DROPOFF",
+    city: "toronto",
+    status: "ACTIVE",
+    avgRating: 4.7,
+    ratingCount: 22,
+  },
+  {
+    owner: "694dfb6fc838697b9e32754b",
+    type: "SERVICE",
+    title: "Interior Painting (1 Room)",
+    description:
+      "Interior wall painting for 1 standard room. Includes prep + clean finish. Paint can be provided by you or me.",
+    category: "694f4139d1b429711dcb6606", // Painting Services
+    images: [],
+    price: 320,
+    priceUnit: "JOB",
+    deliveryMode: "DROPOFF",
+    city: "scarborough",
+    status: "ACTIVE",
+    avgRating: 4.8,
+    ratingCount: 12,
+  },
+  {
+    owner: "694dfc15c838697b9e32754f",
+    type: "SERVICE",
+    title: "Furniture Assembly (IKEA / Wayfair)",
+    description:
+      "Professional furniture assembly: beds, desks, wardrobes, shelves. Fast and clean. Minimum 1 hour.",
+    category: "694f4139d1b429711dcb6607", // Furniture Assembly
+    images: [],
+    price: 28,
+    priceUnit: "HOUR",
+    deliveryMode: "DROPOFF",
+    city: "toronto",
+    status: "ACTIVE",
+    avgRating: 4.6,
+    ratingCount: 18,
+  },
+  {
+    owner: "694e12fc80e065eae14dd709",
+    type: "SERVICE",
+    title: "IT Support (PC Setup + Fixes)",
+    description:
+      "PC setup, Windows install, driver fixes, performance tuning, and basic networking help.",
+    category: "694f4139d1b429711dcb6608", // IT Support
+    images: [],
+    price: 40,
+    priceUnit: "HOUR",
+    deliveryMode: "ONLINE",
+    city: "north york",
+    status: "ACTIVE",
+    avgRating: 4.9,
+    ratingCount: 27,
+  },
+  {
+    owner: "6951cfdab7d7f83c236dc230",
+    type: "SERVICE",
+    title: "Web Development (Landing Page)",
+    description:
+      "I can build a modern responsive landing page (Next.js/React). Includes basic SEO and deployment guidance.",
+    category: "694f4139d1b429711dcb6609", // Web Development
+    images: [],
+    price: 250,
+    priceUnit: "JOB",
+    deliveryMode: "ONLINE",
+    city: "mississauga",
+    status: "ACTIVE",
+    avgRating: 4.7,
+    ratingCount: 9,
+  },
+  {
+    owner: "6951d049b7d7f83c236dc234",
+    type: "SERVICE",
+    title: "Snow Removal (Driveway + Sidewalk)",
+    description:
+      "Fast snow removal service for driveway and sidewalks after snowfall. Same-day depending on weather.",
+    category: "694f4139d1b429711dcb6610", // Snow Removal
+    images: [],
+    price: 90,
+    priceUnit: "JOB",
+    deliveryMode: "DROPOFF",
+    city: "brampton",
+    status: "ACTIVE",
+    avgRating: 4.3,
+    ratingCount: 6,
+  },
+];
+
+import { Listing } from "../models/listing.model.js";
+import connectDB from "../db/index.js";
+import dotenv from "dotenv";
+
+
+dotenv.config({
+  path: "./.env",
+});
+
+const seedListings = async () => {
+  try {
+    await connectDB();
+
+    await Listing.deleteMany(); // safe for dev only
+    await Listing.insertMany(listings);
+
+    console.log("✅ Listings seeded successfully");
+    process.exit();
+  } catch (error) {
+    console.error("❌ Seeding failed:", error);
+    process.exit(1);
+  }
+};
+
+seedListings();

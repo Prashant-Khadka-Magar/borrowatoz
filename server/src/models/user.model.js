@@ -120,4 +120,4 @@ userSchema.methods.verifyEmailOtp = async function (enteredOtp) {
   return { valid: true };
 };
 
-export const User = mongoose.model("user", userSchema);
+export const User = mongoose.model("User", userSchema);

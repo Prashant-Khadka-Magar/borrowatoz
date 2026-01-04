@@ -1,5 +1,5 @@
 import express from "express";
-import { createListing } from "../controllers/listing.controller.js";
+import { browseListing, createListing, getListingById } from "../controllers/listing.controller.js";
 import { protect } from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
 
@@ -11,5 +11,8 @@ router.post(
   upload.fields([{ name: "images", maxCount: 10 }]),
   createListing
 );
+
+router.get("/",browseListing)
+router.get("/:id",getListingById)
 
 export default router;
