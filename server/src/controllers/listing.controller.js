@@ -293,4 +293,6 @@ const getCategoriesNames = asyncHandler(async (req, res) => {
       .json({ success: false, message: "error getting categories" });
   }
 });
+
+
 export { createListing, browseListing, getListingById, getCategoriesNames };

@@ -3,7 +3,18 @@ Must do
 1. Refresh & Access token
 
 
-while displaying the profile do not show the renter history 
+skeleton on frontend
+
+many modifications can be made in listing model
+
+can accept specific address too and show the nearby locations but search always based the city aftetr the user add the specific location find the city and search based on it
+
+middleware check for admin
+caching
+
+FFMPEG video for Listing item if possible
+
+while displaying the profile do not show the user buying history 
 
 
 do not create user until the otp is sent or if there is error in sending otp

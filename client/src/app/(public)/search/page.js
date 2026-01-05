@@ -1,5 +1,5 @@
 export default function Search(){
-    <div>
-        
+  return  <div>
+        Search Page
     </div>
 }
