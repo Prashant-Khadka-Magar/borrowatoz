@@ -16,8 +16,6 @@ const createListing = asyncHandler(async (req, res) => {
   const type = req.body.type;
   const category = req.body.category ?? null;
 
-  const images = Array.isArray(req.body.images) ? req.body.images : [];
-
   const priceRaw = req.body.price;
   const price = typeof priceRaw === "string" ? Number(priceRaw) : priceRaw;
 
@@ -230,6 +228,97 @@ const browseListing = asyncHandler(async (req, res) => {
   }
 });
 
+export const updateListing = asyncHandler(async (req, res) => {
+  const userId = req.user?._id;
+  const listingId = req.params.id;
+
+  if (!userId) return res.status(401).json({ success: false, message: "Not authorized" });
+
+  if (!mongoose.Types.ObjectId.isValid(listingId)) {
+    return res.status(400).json({ success: false, message: "Invalid listing id" });
+  }
+
+  const listing = await Listing.findById(listingId).select("owner type");
+  if (!listing) {
+    return res.status(404).json({ success: false, message: "Listing not found" });
+  }
+
+  if (listing.owner.toString() !== userId.toString()) {
+    return res.status(403).json({ success: false, message: "Not authorized to update" });
+  }
+
+  const updates = {};
+
+  if (req.body.city != null) {
+    const city = String(req.body.city).trim().toLowerCase();
+    if (!city) return res.status(400).json({ success: false, message: "city cannot be empty" });
+    updates.city = city;
+  }
+
+  if (req.body.type != null) {
+    const type = String(req.body.type).trim().toUpperCase();
+    if (!["ITEM", "SERVICE"].includes(type)) {
+      return res.status(400).json({ success: false, message: "Invalid type" });
+    }
+    updates.type = type;
+  }
+
+  if (req.body.category != null) {
+    const categoryId = String(req.body.category).trim();
+    if (!mongoose.Types.ObjectId.isValid(categoryId)) {
+      return res.status(400).json({ success: false, message: "Invalid category id" });
+    }
+
+    const cat = await Category.findById(categoryId).select("_id type isActive").lean();
+    if (!cat || cat.isActive === false) {
+      return res.status(400).json({ success: false, message: "Category not found/inactive" });
+    }
+
+    const effectiveType = updates.type ?? listing.type;
+    if (cat.type !== effectiveType) {
+      return res.status(400).json({ success: false, message: "Category type does not match listing type" });
+    }
+
+    updates.category = cat._id;
+  }
+
+  if (req.body.price != null) {
+    const price = Number(req.body.price);
+    if (!Number.isFinite(price) || price < 0) {
+      return res.status(400).json({ success: false, message: "Invalid price" });
+    }
+    updates.price = price;
+  }
+
+  if (req.body.priceUnit != null) {
+    const priceUnit = String(req.body.priceUnit).trim().toUpperCase();
+    if (!["HOUR", "DAY", "JOB"].includes(priceUnit)) {
+      return res.status(400).json({ success: false, message: "Invalid priceUnit" });
+    }
+    updates.priceUnit = priceUnit;
+  }
+
+  if (req.body.deliveryMode != null) {
+    const deliveryMode = String(req.body.deliveryMode).trim().toUpperCase();
+    if (!["PICKUP", "DROPOFF", "DELIVERY", "ONLINE"].includes(deliveryMode)) {
+      return res.status(400).json({ success: false, message: "Invalid deliveryMode" });
+    }
+    updates.deliveryMode = deliveryMode;
+  }
+
+  if (Object.keys(updates).length === 0) {
+    return res.status(400).json({ success: false, message: "No valid fields provided to update" });
+  }
+
+  const updatedListing = await Listing.findByIdAndUpdate(
+    listingId,
+    { $set: updates },
+    { new: true, runValidators: true }
+  );
+
+  return res.status(200).json({ success: true, listing: updatedListing });
+});
+
 const getListingById = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
@@ -287,12 +376,17 @@ const getCategoriesNames = asyncHandler(async (req, res) => {
       categories,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res
       .status(500)
       .json({ success: false, message: "error getting categories" });
   }
 });
 
-
-export { createListing, browseListing, getListingById, getCategoriesNames };
+export {
+  createListing,
+  browseListing,
+  getListingById,
+  getCategoriesNames,
+  updateListing,
+};
