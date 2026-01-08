@@ -228,30 +228,40 @@ const browseListing = asyncHandler(async (req, res) => {
   }
 });
 
-export const updateListing = asyncHandler(async (req, res) => {
+const updateListing = asyncHandler(async (req, res) => {
   const userId = req.user?._id;
   const listingId = req.params.id;
 
-  if (!userId) return res.status(401).json({ success: false, message: "Not authorized" });
+  if (!userId)
+    return res.status(401).json({ success: false, message: "Not authorized" });
 
   if (!mongoose.Types.ObjectId.isValid(listingId)) {
-    return res.status(400).json({ success: false, message: "Invalid listing id" });
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid listing id" });
   }
 
   const listing = await Listing.findById(listingId).select("owner type");
   if (!listing) {
-    return res.status(404).json({ success: false, message: "Listing not found" });
+    return res
+      .status(404)
+      .json({ success: false, message: "Listing not found" });
   }
 
   if (listing.owner.toString() !== userId.toString()) {
-    return res.status(403).json({ success: false, message: "Not authorized to update" });
+    return res
+      .status(403)
+      .json({ success: false, message: "Not authorized to update" });
   }
 
   const updates = {};
 
   if (req.body.city != null) {
     const city = String(req.body.city).trim().toLowerCase();
-    if (!city) return res.status(400).json({ success: false, message: "city cannot be empty" });
+    if (!city)
+      return res
+        .status(400)
+        .json({ success: false, message: "city cannot be empty" });
     updates.city = city;
   }
 
@@ -266,17 +276,26 @@ export const updateListing = asyncHandler(async (req, res) => {
   if (req.body.category != null) {
     const categoryId = String(req.body.category).trim();
     if (!mongoose.Types.ObjectId.isValid(categoryId)) {
-      return res.status(400).json({ success: false, message: "Invalid category id" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid category id" });
     }
 
-    const cat = await Category.findById(categoryId).select("_id type isActive").lean();
+    const cat = await Category.findById(categoryId)
+      .select("_id type isActive")
+      .lean();
     if (!cat || cat.isActive === false) {
-      return res.status(400).json({ success: false, message: "Category not found/inactive" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Category not found/inactive" });
     }
 
     const effectiveType = updates.type ?? listing.type;
     if (cat.type !== effectiveType) {
-      return res.status(400).json({ success: false, message: "Category type does not match listing type" });
+      return res.status(400).json({
+        success: false,
+        message: "Category type does not match listing type",
+      });
     }
 
     updates.category = cat._id;
@@ -293,7 +312,9 @@ export const updateListing = asyncHandler(async (req, res) => {
   if (req.body.priceUnit != null) {
     const priceUnit = String(req.body.priceUnit).trim().toUpperCase();
     if (!["HOUR", "DAY", "JOB"].includes(priceUnit)) {
-      return res.status(400).json({ success: false, message: "Invalid priceUnit" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid priceUnit" });
     }
     updates.priceUnit = priceUnit;
   }
@@ -301,13 +322,17 @@ export const updateListing = asyncHandler(async (req, res) => {
   if (req.body.deliveryMode != null) {
     const deliveryMode = String(req.body.deliveryMode).trim().toUpperCase();
     if (!["PICKUP", "DROPOFF", "DELIVERY", "ONLINE"].includes(deliveryMode)) {
-      return res.status(400).json({ success: false, message: "Invalid deliveryMode" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid deliveryMode" });
     }
     updates.deliveryMode = deliveryMode;
   }
 
   if (Object.keys(updates).length === 0) {
-    return res.status(400).json({ success: false, message: "No valid fields provided to update" });
+    return res
+      .status(400)
+      .json({ success: false, message: "No valid fields provided to update" });
   }
 
   const updatedListing = await Listing.findByIdAndUpdate(
@@ -317,6 +342,133 @@ export const updateListing = asyncHandler(async (req, res) => {
   );
 
   return res.status(200).json({ success: true, listing: updatedListing });
+});
+
+const addPhoto = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.user?._id;
+    const listingId = req.params.id;
+
+    if (!userId)
+      return res
+        .status(401)
+        .json({ success: false, message: "Not authorized" });
+
+    if (!mongoose.Types.ObjectId.isValid(listingId)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid listing id" });
+    }
+
+    const listing = await Listing.findById(listingId).select("owner");
+    if (!listing) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Listing not found" });
+    }
+
+    if (listing.owner.toString() !== userId.toString()) {
+      return res
+        .status(403)
+        .json({ success: false, message: "Not authorized to update" });
+    }
+
+    const imagePaths = req.files?.images ?? [];
+
+    if (imagePaths.length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, message: "No images uploaded" });
+    }
+    const updatedImages = [];
+
+    for (const imagePath of imagePaths) {
+      try {
+        const uploadedImage = await uploadOnCloudinary(imagePath.path);
+
+        if (!uploadedImage?.url || !uploadedImage?.public_id) {
+          return res.status(500).json({
+            success: false,
+            message: "Cloudinary upload failed (missing url/public_id)",
+          });
+        }
+
+        updatedImages.push({
+          url: uploadedImage.url,
+          publicId: uploadedImage.public_id,
+        });
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        return res
+          .status(500)
+          .json({ error: "ERROR UPLOADING IMAGE TO CLOUDINARY" });
+      }
+    }
+
+    await Listing.findByIdAndUpdate(
+      listingId,
+      { $push: { images: { $each: updatedImages } } },
+      { new: true, runValidators: true }
+    );
+    return res
+      .status(200)
+      .json({ success: true, message: "Image updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "error adding photo" });
+  }
+});
+
+const removePhoto = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.user?._id;
+    const listingId = req.params.id;
+
+    if (!userId)
+      return res
+        .status(401)
+        .json({ success: false, message: "Not authorized" });
+
+    if (!mongoose.Types.ObjectId.isValid(listingId)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid listing id" });
+    }
+
+    const listing = await Listing.findById(listingId).select("owner");
+    if (!listing) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Listing not found" });
+    }
+
+    if (listing.owner.toString() !== userId.toString()) {
+      return res
+        .status(403)
+        .json({ success: false, message: "Not authorized to update" });
+    }
+
+    const imageId = String(req.body.publicId ?? "").trim();
+
+    if (!imageId) {
+      return res
+        .status(404)
+        .json({ success: false, message: "publicId is required" });
+    }
+
+    await Listing.findByIdAndUpdate(
+      listingId,
+      { $pull: { images: { publicId: imageId } } },
+      { new: true, runValidators: true }
+    );
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Image removed successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "error removing photo" });
+  }
 });
 
 const getListingById = asyncHandler(async (req, res) => {
@@ -383,10 +535,35 @@ const getCategoriesNames = asyncHandler(async (req, res) => {
   }
 });
 
+const getMyListing = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.user?._id;
+
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Not Logged In" });
+    }
+
+    const listings = await (await Listing.find({ owner: userId }))
+      .sort({ createdAt: -1 })
+      .populate("category", "name")
+      .lean();
+
+    return res.status(200).json({ success: true, listings });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "error getting categories" });
+  }
+});
+
 export {
   createListing,
   browseListing,
   getListingById,
   getCategoriesNames,
   updateListing,
+  addPhoto,
+  removePhoto,
+  getMyListing
 };

@@ -1,5 +1,12 @@
 import express from "express";
-import { browseListing, createListing, getListingById } from "../controllers/listing.controller.js";
+import {
+  addPhoto,
+  browseListing,
+  createListing,
+  getListingById,
+  removePhoto,
+  updateListing,
+} from "../controllers/listing.controller.js";
 import { protect } from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
 
@@ -12,7 +19,15 @@ router.post(
   createListing
 );
 
-router.get("/",browseListing)
-router.get("/:id",getListingById)
+router.get("/", browseListing);
+router.get("/:id", getListingById);
+router.post("/update/:id", protect, updateListing);
+router.post(
+  "/update/:id/add-photo",
+  protect,
+  upload.fields([{ name: "images", maxCount: 10 }]),
+  addPhoto
+);
+router.post("/update/:id/remove-photo", protect, removePhoto);
 
 export default router;
