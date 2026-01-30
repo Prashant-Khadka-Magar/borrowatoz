@@ -1,4 +1,5 @@
-const listings = [
+// listings.seed.js
+export const listings = [
   // -------------------- ITEMS --------------------
   {
     owner: "694da8eff12ddeec46013780",
@@ -6,10 +7,10 @@ const listings = [
     title: "DeWalt 20V Cordless Drill Kit",
     description:
       "DeWalt 20V drill/driver with 2 batteries + charger. Clean condition, strong torque for wood/metal. Great for DIY and small jobs.",
-    category: "694f4139d1b429711dcb65ef", // Power Tools
+    category: "694f4139d1b429711dcb65ef",
     images: [],
     price: 15,
-    priceUnit: "DAY",
+    billingUnit: "DAY",
     deliveryMode: "PICKUP",
     city: "toronto",
     status: "ACTIVE",
@@ -22,10 +23,10 @@ const listings = [
     title: "Professional Hand Tool Set (150 pcs)",
     description:
       "Complete hand tool set: wrenches, sockets, screwdrivers, pliers, bits. Perfect for home repairs and basic automotive work.",
-    category: "694f4139d1b429711dcb65f0", // Hand Tools
+    category: "694f4139d1b429711dcb65f0",
     images: [],
     price: 12,
-    priceUnit: "DAY",
+    billingUnit: "DAY",
     deliveryMode: "PICKUP",
     city: "scarborough",
     status: "ACTIVE",
@@ -38,10 +39,10 @@ const listings = [
     title: "Electric Lawn Trimmer + Leaf Blower",
     description:
       "Lightweight electric trimmer plus compact leaf blower. Great for small yards and quick cleanups. Easy to use.",
-    category: "694f4139d1b429711dcb65f1", // Gardening Tools
+    category: "694f4139d1b429711dcb65f1",
     images: [],
     price: 18,
-    priceUnit: "DAY",
+    billingUnit: "DAY",
     deliveryMode: "DROPOFF",
     city: "toronto",
     status: "ACTIVE",
@@ -54,10 +55,10 @@ const listings = [
     title: "Concrete Mixer (Portable)",
     description:
       "Portable concrete mixer for small construction jobs. Ideal for patios, posts, and repairs. Easy to transport.",
-    category: "694f4139d1b429711dcb65f2", // Construction Equipment
+    category: "694f4139d1b429711dcb65f2",
     images: [],
     price: 55,
-    priceUnit: "DAY",
+    billingUnit: "DAY",
     deliveryMode: "DELIVERY",
     city: "north york",
     status: "ACTIVE",
@@ -70,10 +71,10 @@ const listings = [
     title: "Car Jack + Tire Change Kit",
     description:
       "Hydraulic car jack, wheel wrench, tire inflator, and emergency kit. Good for road trips and quick tire changes.",
-    category: "694f4139d1b429711dcb65f3", // Automotive Tools
+    category: "694f4139d1b429711dcb65f3",
     images: [],
     price: 10,
-    priceUnit: "DAY",
+    billingUnit: "DAY",
     deliveryMode: "PICKUP",
     city: "mississauga",
     status: "ACTIVE",
@@ -86,10 +87,10 @@ const listings = [
     title: "Laser Measuring Tool (100m)",
     description:
       "Accurate laser measuring tool up to 100m with digital display. Perfect for renovation, furniture fitting, and layouts.",
-    category: "694f4139d1b429711dcb65f4", // Measuring Tools
+    category: "694f4139d1b429711dcb65f4",
     images: [],
     price: 9,
-    priceUnit: "DAY",
+    billingUnit: "DAY",
     deliveryMode: "PICKUP",
     city: "brampton",
     status: "ACTIVE",
@@ -102,10 +103,15 @@ const listings = [
     title: "Canon DSLR Camera Kit (Body + Lens)",
     description:
       "Canon DSLR with standard zoom lens. Great for portraits and events. Includes strap and SD card. No drops, clean sensor.",
-    category: "694f4139d1b429711dcb65f5", // Camera Equipment
-    images: [],
+    category: "694f4139d1b429711dcb65f5",
+    images: [
+      {
+        publicId: "seed/canon-dslr-1",
+        url: "https://res.cloudinary.com/demo/image/upload/v1710000000/sample.jpg",
+      },
+    ],
     price: 60,
-    priceUnit: "DAY",
+    billingUnit: "DAY",
     deliveryMode: "DELIVERY",
     city: "toronto",
     status: "ACTIVE",
@@ -118,10 +124,10 @@ const listings = [
     title: "Portable PA Speaker + Wireless Mic",
     description:
       "Portable PA speaker with wireless microphone. Good for announcements, small events, and presentations.",
-    category: "694f4139d1b429711dcb65f6", // Audio Equipment
+    category: "694f4139d1b429711dcb65f6",
     images: [],
     price: 35,
-    priceUnit: "DAY",
+    billingUnit: "DAY",
     deliveryMode: "DROPOFF",
     city: "scarborough",
     status: "ACTIVE",
@@ -134,10 +140,15 @@ const listings = [
     title: "LED Softbox Lighting Kit (2 lights)",
     description:
       "Softbox lighting kit for photography/video. Adjustable brightness, diffusers included. Great for content creation.",
-    category: "694f4139d1b429711dcb65f7", // Lighting Equipment
-    images: [],
+    category: "694f4139d1b429711dcb65f7",
+    images: [
+      {
+        publicId: "seed/softbox-1",
+        url: "https://res.cloudinary.com/demo/image/upload/v1710000001/sample.jpg",
+      },
+    ],
     price: 25,
-    priceUnit: "DAY",
+    billingUnit: "DAY",
     deliveryMode: "PICKUP",
     city: "toronto",
     status: "ACTIVE",
@@ -150,10 +161,10 @@ const listings = [
     title: "4K Action Camera + Accessories",
     description:
       "4K action camera with mounts, waterproof case, and extra batteries. Perfect for travel and sports.",
-    category: "694f4139d1b429711dcb65f8", // Video Equipment
+    category: "694f4139d1b429711dcb65f8",
     images: [],
     price: 20,
-    priceUnit: "DAY",
+    billingUnit: "DAY",
     deliveryMode: "DELIVERY",
     city: "north york",
     status: "ACTIVE",
@@ -166,10 +177,10 @@ const listings = [
     title: "1080p Projector + 100-inch Screen",
     description:
       "HD projector with HDMI support and a 100-inch screen. Great for movie night, sports, and presentations.",
-    category: "694f4139d1b429711dcb65f9", // Projectors
+    category: "694f4139d1b429711dcb65f9",
     images: [],
     price: 40,
-    priceUnit: "DAY",
+    billingUnit: "DAY",
     deliveryMode: "DELIVERY",
     city: "mississauga",
     status: "ACTIVE",
@@ -182,10 +193,10 @@ const listings = [
     title: "Gaming Console (PS5) + 2 Controllers",
     description:
       "PS5 with 2 controllers. Great condition. Perfect for weekend rentals and parties.",
-    category: "694f4139d1b429711dcb65fb", // Gaming Consoles
+    category: "694f4139d1b429711dcb65fb",
     images: [],
     price: 45,
-    priceUnit: "DAY",
+    billingUnit: "DAY",
     deliveryMode: "PICKUP",
     city: "brampton",
     status: "ACTIVE",
@@ -198,10 +209,10 @@ const listings = [
     title: "Event Tent / Canopy (10x10) + Weights",
     description:
       "10x10 canopy tent with sidewalls and weights. Perfect for outdoor events and markets.",
-    category: "694f4139d1b429711dcb65fe", // Tents & Canopies
+    category: "694f4139d1b429711dcb65fe",
     images: [],
     price: 35,
-    priceUnit: "DAY",
+    billingUnit: "DAY",
     deliveryMode: "DROPOFF",
     city: "toronto",
     status: "ACTIVE",
@@ -214,10 +225,10 @@ const listings = [
     title: "Party Tables & Chairs (Set: 2 tables, 12 chairs)",
     description:
       "Foldable tables and chairs for birthdays, small weddings, and backyard parties. Clean and sturdy.",
-    category: "694f4139d1b429711dcb65ff", // Tables & Chairs
+    category: "694f4139d1b429711dcb65ff",
     images: [],
     price: 55,
-    priceUnit: "DAY",
+    billingUnit: "DAY",
     deliveryMode: "DELIVERY",
     city: "scarborough",
     status: "ACTIVE",
@@ -232,11 +243,11 @@ const listings = [
     title: "Deep House Cleaning (Hourly)",
     description:
       "Deep cleaning for apartments and houses. Includes kitchen + washroom focus. Bring my own supplies if needed.",
-    category: "694f4139d1b429711dcb6601", // Cleaning Services
+    category: "694f4139d1b429711dcb6601",
     images: [],
     price: 30,
-    priceUnit: "HOUR",
-    deliveryMode: "DELIVERY", // service can still be “DELIVERY” in your enum (you’ll interpret as travel)
+    billingUnit: "HOUR",
+    deliveryMode: "DELIVERY",
     city: "toronto",
     status: "ACTIVE",
     avgRating: 4.9,
@@ -248,10 +259,10 @@ const listings = [
     title: "Moving Help (2 People)",
     description:
       "Help with loading/unloading, lifting, and organizing. Fast work, careful handling. Minimum 2 hours.",
-    category: "694f4139d1b429711dcb6602", // Moving Help
+    category: "694f4139d1b429711dcb6602",
     images: [],
     price: 50,
-    priceUnit: "HOUR",
+    billingUnit: "HOUR",
     deliveryMode: "DROPOFF",
     city: "north york",
     status: "ACTIVE",
@@ -264,26 +275,28 @@ const listings = [
     title: "Handyman Service (General Fixes)",
     description:
       "Minor repairs: shelves, curtain rods, door alignment, patching holes, basic installations. Tools included.",
-    category: "694f4139d1b429711dcb6603", // Handyman Services
+    category: "694f4139d1b429711dcb6603",
     images: [],
     price: 35,
-    priceUnit: "HOUR",
+    billingUnit: "HOUR",
     deliveryMode: "DROPOFF",
     city: "mississauga",
     status: "ACTIVE",
     avgRating: 4.5,
     ratingCount: 15,
   },
+
+  // ✅ FIXED: JOB -> PER_GROUP (flat price)
   {
     owner: "6951d049b7d7f83c236dc234",
     type: "SERVICE",
     title: "Plumbing Help (Basic Repairs)",
     description:
       "Fix leaky taps, replace faucets, unclog sinks, toilet issues. Transparent pricing, quick response.",
-    category: "694f4139d1b429711dcb6604", // Plumbing Services
+    category: "694f4139d1b429711dcb6604",
     images: [],
     price: 120,
-    priceUnit: "JOB",
+    billingUnit: "PER_GROUP",
     deliveryMode: "DROPOFF",
     city: "brampton",
     status: "ACTIVE",
@@ -296,10 +309,10 @@ const listings = [
     title: "Electrical Service (Small Jobs)",
     description:
       "Light fixture replacement, switch/outlet change, basic troubleshooting. Safe and clean work.",
-    category: "694f4139d1b429711dcb6605", // Electrical Services
+    category: "694f4139d1b429711dcb6605",
     images: [],
     price: 140,
-    priceUnit: "JOB",
+    billingUnit: "PER_GROUP",
     deliveryMode: "DROPOFF",
     city: "toronto",
     status: "ACTIVE",
@@ -312,10 +325,10 @@ const listings = [
     title: "Interior Painting (1 Room)",
     description:
       "Interior wall painting for 1 standard room. Includes prep + clean finish. Paint can be provided by you or me.",
-    category: "694f4139d1b429711dcb6606", // Painting Services
+    category: "694f4139d1b429711dcb6606",
     images: [],
     price: 320,
-    priceUnit: "JOB",
+    billingUnit: "PER_GROUP",
     deliveryMode: "DROPOFF",
     city: "scarborough",
     status: "ACTIVE",
@@ -328,10 +341,10 @@ const listings = [
     title: "Furniture Assembly (IKEA / Wayfair)",
     description:
       "Professional furniture assembly: beds, desks, wardrobes, shelves. Fast and clean. Minimum 1 hour.",
-    category: "694f4139d1b429711dcb6607", // Furniture Assembly
+    category: "694f4139d1b429711dcb6607",
     images: [],
     price: 28,
-    priceUnit: "HOUR",
+    billingUnit: "HOUR",
     deliveryMode: "DROPOFF",
     city: "toronto",
     status: "ACTIVE",
@@ -344,10 +357,10 @@ const listings = [
     title: "IT Support (PC Setup + Fixes)",
     description:
       "PC setup, Windows install, driver fixes, performance tuning, and basic networking help.",
-    category: "694f4139d1b429711dcb6608", // IT Support
+    category: "694f4139d1b429711dcb6608",
     images: [],
     price: 40,
-    priceUnit: "HOUR",
+    billingUnit: "HOUR",
     deliveryMode: "ONLINE",
     city: "north york",
     status: "ACTIVE",
@@ -360,10 +373,10 @@ const listings = [
     title: "Web Development (Landing Page)",
     description:
       "I can build a modern responsive landing page (Next.js/React). Includes basic SEO and deployment guidance.",
-    category: "694f4139d1b429711dcb6609", // Web Development
+    category: "694f4139d1b429711dcb6609",
     images: [],
     price: 250,
-    priceUnit: "JOB",
+    billingUnit: "PER_GROUP",
     deliveryMode: "ONLINE",
     city: "mississauga",
     status: "ACTIVE",
@@ -376,10 +389,10 @@ const listings = [
     title: "Snow Removal (Driveway + Sidewalk)",
     description:
       "Fast snow removal service for driveway and sidewalks after snowfall. Same-day depending on weather.",
-    category: "694f4139d1b429711dcb6610", // Snow Removal
+    category: "694f4139d1b429711dcb6610",
     images: [],
     price: 90,
-    priceUnit: "JOB",
+    billingUnit: "PER_GROUP",
     deliveryMode: "DROPOFF",
     city: "brampton",
     status: "ACTIVE",
@@ -391,7 +404,6 @@ const listings = [
 import { Listing } from "../models/listing.model.js";
 import connectDB from "../db/index.js";
 import dotenv from "dotenv";
-
 
 dotenv.config({
   path: "./.env",

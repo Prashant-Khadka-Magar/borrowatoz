@@ -46,10 +46,18 @@ const rentalSchema = new Schema(
       min: 0,
     },
 
-    priceUnit: {
+    billingUnit: {
       type: String,
-      enum: ["HOUR", "DAY", "JOB"],
-      required: true,
+      enum: ["HOUR", "DAY", "PER_GUEST", "PER_GROUP"],
+      default: "DAY",
+      index: true,
+      validate: {
+        validator: function (v) {
+          if (this.type === "ITEM") return v === "HOUR" || v === "DAY";
+          return true;
+        },
+        message: "ITEM listings can only use HOUR or DAY billing.",
+      },
     },
 
     totalAmount: {
@@ -74,6 +82,12 @@ const rentalSchema = new Schema(
       type: String,
       trim: true,
       maxlength: 500,
+    },
+
+    billingUnit: {
+      type: String,
+      enum: ["HOUR", "DAY", "PER_GUEST", "PER_GROUP"],
+      required: true,
     },
   },
   { timestamps: true }

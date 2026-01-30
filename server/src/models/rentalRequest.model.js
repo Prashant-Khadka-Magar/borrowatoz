@@ -41,6 +41,12 @@ const rentalRequestSchema = new Schema(
       trim: true,
       maxLength: 500,
     },
+
+    guestCount: {
+      type: Number,
+      min: 1,
+      default: 1,
+    },
   },
   { timestamps: true }
 );

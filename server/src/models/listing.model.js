@@ -56,10 +56,18 @@ const listingSchema = new Schema(
       min: 0,
     },
 
-    priceUnit: {
+    billingUnit: {
       type: String,
-      enum: ["HOUR", "DAY", "JOB"],
+      enum: ["HOUR", "DAY", "PER_GUEST", "PER_GROUP"],
       default: "DAY",
+      index: true,
+      validate: {
+        validator: function (v) {
+          if (this.type === "ITEM") return v === "HOUR" || v === "DAY";
+          return true;
+        },
+        message: "ITEM listings can only use HOUR or DAY billing.",
+      },
     },
 
     deliveryMode: {

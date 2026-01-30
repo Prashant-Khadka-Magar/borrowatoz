@@ -19,7 +19,7 @@ const createListing = asyncHandler(async (req, res) => {
   const priceRaw = req.body.price;
   const price = typeof priceRaw === "string" ? Number(priceRaw) : priceRaw;
 
-  const priceUnit = req.body.priceUnit ?? "DAY";
+  const billingUnit = req.body.billingUnit ?? "DAY";
   const deliveryMode = req.body.deliveryMode ?? "PICKUP";
 
   const cityRaw = (req.body.city ?? "").trim();
@@ -45,10 +45,20 @@ const createListing = asyncHandler(async (req, res) => {
     });
   }
 
-  if (!["HOUR", "DAY", "JOB"].includes(priceUnit)) {
+  const allowedForItem = ["HOUR", "DAY"];
+  const allowedForService = ["HOUR", "DAY", "PER_GUEST", "PER_GROUP"];
+
+  if (type === "ITEM" && !allowedForItem.includes(billingUnit)) {
     return res.status(400).json({
       success: false,
-      message: "Invalid price unit",
+      message: "ITEM listings can only be billed by HOUR or DAY",
+    });
+  }
+
+  if (type === "SERVICE" && !allowedForService.includes(billingUnit)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid billing unit for SERVICE",
     });
   }
 
@@ -104,7 +114,7 @@ const createListing = asyncHandler(async (req, res) => {
     category,
     images: updatedImages,
     price,
-    priceUnit,
+    billingUnit,
     deliveryMode,
     city: cityRaw.toLowerCase(),
   });
@@ -116,7 +126,7 @@ const createListing = asyncHandler(async (req, res) => {
   });
 });
 
-// city,type,category,q,minPrice,maxPrice,priceUnit,deliveryMode,page,limit,sort
+// city,type,category,q,minPrice,maxPrice,billingUnit,deliveryMode,page,limit,sort
 const browseListing = asyncHandler(async (req, res) => {
   try {
     let filter = {};
@@ -202,7 +212,7 @@ const browseListing = asyncHandler(async (req, res) => {
     const skip = page * limit - limit;
 
     const projection =
-      "title type images price priceUnit deliveryMode city owner createdAt";
+      "title type images price billingUnit deliveryMode city owner createdAt";
 
     const [items, total] = await Promise.all([
       Listing.find(filter)
@@ -309,14 +319,26 @@ const updateListing = asyncHandler(async (req, res) => {
     updates.price = price;
   }
 
-  if (req.body.priceUnit != null) {
-    const priceUnit = String(req.body.priceUnit).trim().toUpperCase();
-    if (!["HOUR", "DAY", "JOB"].includes(priceUnit)) {
+  if (req.body.billingUnit != null) {
+    const billingUnit = String(req.body.billingUnit).trim().toUpperCase();
+    const allowedUnits = ["HOUR", "DAY", "PER_GUEST", "PER_GROUP"];
+
+    if (!allowedUnits.includes(billingUnit)) {
       return res
         .status(400)
-        .json({ success: false, message: "Invalid priceUnit" });
+        .json({ success: false, message: "Invalid billingUnit" });
     }
-    updates.priceUnit = priceUnit;
+
+    const effectiveType = updates.type ?? listing.type;
+
+    if (effectiveType === "ITEM" && !["HOUR", "DAY"].includes(billingUnit)) {
+      return res.status(400).json({
+        success: false,
+        message: "ITEM listings can only be billed by HOUR or DAY",
+      });
+    }
+
+    updates.billingUnit = billingUnit;
   }
 
   if (req.body.deliveryMode != null) {
@@ -565,5 +587,5 @@ export {
   updateListing,
   addPhoto,
   removePhoto,
-  getMyListing
+  getMyListing,
 };
