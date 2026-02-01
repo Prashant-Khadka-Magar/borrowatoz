@@ -6,15 +6,16 @@ import { Rental } from "../models/rental.model.js";
 const getMyRentals = asyncHandler(async (req, res) => {
   try {
     const userId = req.user?._id;
+    console.log(userId)
 
     if (!userId) {
       return res.status(401).json({ success: false, message: "Not Logged In" });
     }
 
-    // Optional: ?role=borrower|lender|all (default all)
+    //role=borrower|lender|all (default all)
     const role = String(req.query.role ?? "all").trim().toLowerCase();
 
-    // Optional: ?status=ACTIVE|COMPLETED|CANCELLED|DISPUTED
+    //status=ACTIVE|COMPLETED|CANCELLED|DISPUTED
     const status = String(req.query.status ?? "").trim().toUpperCase();
 
     const filter = {};
@@ -143,7 +144,6 @@ const cancelRental = asyncHandler(async (req, res) => {
       });
     }
 
-    // Optional real-world rule: disallow cancelling after it ended
     const now = new Date();
     if (rental.endDate && rental.endDate <= now) {
       return res.status(400).json({
@@ -205,7 +205,6 @@ const markRentalCompleted = asyncHandler(async (req, res) => {
         .json({ success: false, message: "Rental not found" });
     }
 
-    // Usually lender marks completed. If you want borrower too, allow both.
     if (rental.lender.toString() !== userId.toString()) {
       return res.status(403).json({
         success: false,
