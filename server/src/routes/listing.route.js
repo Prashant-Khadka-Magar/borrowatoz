@@ -9,6 +9,7 @@ import {
 } from "../controllers/listing.controller.js";
 import { protect } from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
+import { getListingReviews } from "../controllers/review.controller.js";
 
 const router = express.Router();
 
@@ -29,5 +30,6 @@ router.post(
   addPhoto
 );
 router.post("/update/:id/remove-photo", protect, removePhoto);
+router.get("/listings/:id/reviews", getListingReviews);
 
 export default router;
