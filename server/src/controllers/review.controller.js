@@ -3,7 +3,6 @@ import asyncHandler from "express-async-handler";
 import mongoose from "mongoose";
 import { Review } from "../models/review.model.js";
 
-
 export const getListingReviews = asyncHandler(async (req, res) => {
   const listingId = req.params.id;
 
@@ -22,6 +21,7 @@ export const getListingReviews = asyncHandler(async (req, res) => {
     targetType: "LISTING",
     listing: new mongoose.Types.ObjectId(listingId),
     status: "PUBLISHED",
+    comment: { $ne: "" },
   };
 
   const [reviews, total] = await Promise.all([

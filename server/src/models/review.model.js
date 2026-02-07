@@ -113,18 +113,16 @@ reviewSchema.index(
 reviewSchema.index({ listing: 1, targetType: 1, createdAt: -1 });
 reviewSchema.index({ reviewee: 1, targetType: 1, createdAt: -1 });
 
-/**
- * Conditional requirement: listing is required when targetType === "LISTING"
- */
-reviewSchema.pre("validate", function (next) {
+//to ensure listing field is present for LISTING reviews and not for USER reviews
+reviewSchema.pre("validate", function () {
   if (this.targetType === "LISTING" && !this.listing) {
     this.invalidate("listing", "listing is required for LISTING reviews");
   }
+
   if (this.targetType === "USER") {
-    // ensure listing isn't accidentally set
     this.listing = null;
   }
-  next();
 });
+
 
 export const Review = mongoose.model("Review", reviewSchema);

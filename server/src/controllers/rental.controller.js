@@ -275,7 +275,7 @@ function parseRating(raw) {
  * POST /api/rentals/:id/reviews
  * Borrower -> LISTING review (rating + optional comment)
  */
-export const createListingReviewForRental = asyncHandler(async (req, res) => {
+const createListingReviewForRental = asyncHandler(async (req, res) => {
   const userId = req.user?._id;
   const rentalId = req.params.id;
 
@@ -379,6 +379,7 @@ export const createListingReviewForRental = asyncHandler(async (req, res) => {
       review: created,
     });
   } catch (err) {
+    console.log(err)
     if (err?.code === 11000) {
       return res.status(409).json({
         success: false,
@@ -400,7 +401,7 @@ export const createListingReviewForRental = asyncHandler(async (req, res) => {
  *
  * Body: { rating: 1-5 }
  */
-export const createBorrowerRatingForRental = asyncHandler(async (req, res) => {
+const createBorrowerRatingForRental = asyncHandler(async (req, res) => {
   const userId = req.user?._id;
   const rentalId = req.params.id;
 
@@ -493,4 +494,4 @@ export const createBorrowerRatingForRental = asyncHandler(async (req, res) => {
 
 
 
-export { getMyRentals, getRentalById, cancelRental, markRentalCompleted,xreateListingReviewForRental, createBorrowerRatingForRental, getLenderProviderRating };
+export { getMyRentals, getRentalById, cancelRental, markRentalCompleted, createListingReviewForRental, createBorrowerRatingForRental };
