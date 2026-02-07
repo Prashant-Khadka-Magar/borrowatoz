@@ -1,22 +1,27 @@
-
 import asyncHandler from "express-async-handler";
 import mongoose from "mongoose";
 import { Rental } from "../models/rental.model.js";
+import { Listing } from "../models/listing.model.js";
+import { Review } from "../models/review.model.js";
 
 const getMyRentals = asyncHandler(async (req, res) => {
   try {
     const userId = req.user?._id;
-    console.log(userId)
+    console.log(userId);
 
     if (!userId) {
       return res.status(401).json({ success: false, message: "Not Logged In" });
     }
 
     //role=borrower|lender|all (default all)
-    const role = String(req.query.role ?? "all").trim().toLowerCase();
+    const role = String(req.query.role ?? "all")
+      .trim()
+      .toLowerCase();
 
     //status=ACTIVE|COMPLETED|CANCELLED|DISPUTED
-    const status = String(req.query.status ?? "").trim().toUpperCase();
+    const status = String(req.query.status ?? "")
+      .trim()
+      .toUpperCase();
 
     const filter = {};
 
@@ -77,13 +82,18 @@ const getRentalById = asyncHandler(async (req, res) => {
         .json({ success: false, message: "Rental not found" });
     }
 
-    const isBorrower = String(rental.borrower?._id ?? rental.borrower) === String(userId);
-    const isLender = String(rental.lender?._id ?? rental.lender) === String(userId);
+    const isBorrower =
+      String(rental.borrower?._id ?? rental.borrower) === String(userId);
+    const isLender =
+      String(rental.lender?._id ?? rental.lender) === String(userId);
 
     if (!isBorrower && !isLender) {
       return res
         .status(403)
-        .json({ success: false, message: "Not authorized to view this rental" });
+        .json({
+          success: false,
+          message: "Not authorized to view this rental",
+        });
     }
 
     return res.status(200).json({ success: true, rental });
@@ -111,7 +121,7 @@ const cancelRental = asyncHandler(async (req, res) => {
     }
 
     const rental = await Rental.findById(rentalId).select(
-      "lender borrower status startDate endDate"
+      "lender borrower status startDate endDate",
     );
 
     if (!rental) {
@@ -126,7 +136,10 @@ const cancelRental = asyncHandler(async (req, res) => {
     if (!isBorrower && !isLender) {
       return res
         .status(403)
-        .json({ success: false, message: "Not authorized to cancel this rental" });
+        .json({
+          success: false,
+          message: "Not authorized to cancel this rental",
+        });
     }
 
     if (rental.status !== "ACTIVE") {
@@ -161,7 +174,7 @@ const cancelRental = asyncHandler(async (req, res) => {
           cancellationReason: reason || undefined,
         },
       },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     )
       .populate("listing", "title images")
       .populate("lender", "firstName lastName")
@@ -196,7 +209,7 @@ const markRentalCompleted = asyncHandler(async (req, res) => {
     }
 
     const rental = await Rental.findById(rentalId).select(
-      "lender borrower status endDate"
+      "lender borrower status endDate",
     );
 
     if (!rental) {
@@ -225,14 +238,15 @@ const markRentalCompleted = asyncHandler(async (req, res) => {
     if (!force && rental.endDate && rental.endDate > now) {
       return res.status(400).json({
         success: false,
-        message: "Rental has not ended yet. Use ?force=true if you really mean it.",
+        message:
+          "Rental has not ended yet. Use ?force=true if you really mean it.",
       });
     }
 
     const updated = await Rental.findByIdAndUpdate(
       rentalId,
       { $set: { status: "COMPLETED" } },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     )
       .populate("listing", "title images")
       .populate("lender", "firstName lastName")
@@ -268,8 +282,11 @@ export const createListingReviewForRental = asyncHandler(async (req, res) => {
   if (!userId) {
     return res.status(401).json({ success: false, message: "Not authorized" });
   }
+
   if (!mongoose.Types.ObjectId.isValid(rentalId)) {
-    return res.status(400).json({ success: false, message: "Invalid rental id" });
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid rental id" });
   }
 
   const rating = parseRating(req.body.rating);
@@ -299,14 +316,18 @@ export const createListingReviewForRental = asyncHandler(async (req, res) => {
       }
 
       if (rental.status !== "COMPLETED") {
-        const err = new Error("You can only review after the rental is COMPLETED");
+        const err = new Error(
+          "You can only review after the rental is COMPLETED",
+        );
         err.statusCode = 400;
         throw err;
       }
 
       // v1 rule: borrower reviews listing
       if (String(rental.borrower) !== String(userId)) {
-        const err = new Error("Only the borrower can review this rental's listing");
+        const err = new Error(
+          "Only the borrower can review this rental's listing",
+        );
         err.statusCode = 403;
         throw err;
       }
@@ -326,7 +347,7 @@ export const createListingReviewForRental = asyncHandler(async (req, res) => {
             status: "PUBLISHED",
           },
         ],
-        { session }
+        { session },
       ).then((docs) => docs[0]);
 
       // Update Listing cache (avgRating + ratingCount)
@@ -387,7 +408,9 @@ export const createBorrowerRatingForRental = asyncHandler(async (req, res) => {
     return res.status(401).json({ success: false, message: "Not authorized" });
   }
   if (!mongoose.Types.ObjectId.isValid(rentalId)) {
-    return res.status(400).json({ success: false, message: "Invalid rental id" });
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid rental id" });
   }
 
   const rating = parseRating(req.body.rating);
@@ -409,11 +432,13 @@ export const createBorrowerRatingForRental = asyncHandler(async (req, res) => {
 
   try {
     const rental = await Rental.findById(rentalId).select(
-      "status borrower lender"
+      "status borrower lender",
     );
 
     if (!rental) {
-      return res.status(404).json({ success: false, message: "Rental not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Rental not found" });
     }
 
     if (rental.status !== "COMPLETED") {
@@ -464,4 +489,8 @@ export const createBorrowerRatingForRental = asyncHandler(async (req, res) => {
 });
 
 
-export { getMyRentals, getRentalById, cancelRental, markRentalCompleted };
+
+
+
+
+export { getMyRentals, getRentalById, cancelRental, markRentalCompleted,xreateListingReviewForRental, createBorrowerRatingForRental, getLenderProviderRating };

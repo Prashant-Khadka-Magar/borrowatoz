@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import { User } from "../models/user.model.js";
 import sendEmail from "../utils/sendMail.js";
 import generateToken from "../utils/generateToken.js";
+import { Review } from "../models/review.model.js";
 
 const generateVerificationEmail = (name, verificationCode) => {
   return `
@@ -58,7 +59,7 @@ const register = asyncHandler(async (req, res) => {
 
         const emailContent = generateVerificationEmail(
           userExist.firstName,
-          verificationCode
+          verificationCode,
         );
 
         await sendEmail(userExist.email, "Verify your Email", emailContent);
@@ -82,7 +83,7 @@ const register = asyncHandler(async (req, res) => {
 
     const emailContent = generateVerificationEmail(
       user.firstName,
-      verificationCode
+      verificationCode,
     );
 
     await sendEmail(user.email, "Verify your Email", emailContent);
@@ -120,7 +121,7 @@ const login = asyncHandler(async (req, res) => {
 
       const emailContent = generateVerificationEmail(
         userExist.firstName,
-        verificationCode
+        verificationCode,
       );
 
       await sendEmail(userExist.email, "Verify your Email", emailContent);
@@ -201,11 +202,91 @@ const logout = asyncHandler(async (req, res) => {
 
 const profile = asyncHandler(async (req, res) => {
   try {
-    return res.status(200).json(req.user)
+    return res.status(200).json(req.user);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Error getting Profile" });
   }
 });
 
-export { register, login, verifyOtp, logout,profile };
+export const getLenderProviderRating = asyncHandler(async (req, res) => {
+  const lenderId = req.params.id;
+
+  if (!mongoose.Types.ObjectId.isValid(lenderId)) {
+    return res.status(400).json({ success: false, message: "Invalid user id" });
+  }
+
+  const [stats] = await Review.aggregate([
+    {
+      $match: {
+        targetType: "LISTING",
+        status: "PUBLISHED",
+        reviewee: new mongoose.Types.ObjectId(lenderId),
+      },
+    },
+    {
+      $group: {
+        _id: "$reviewee",
+        ratingCount: { $sum: 1 },
+        avgRating: { $avg: "$rating" },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        ratingCount: 1,
+        avgRating: { $round: ["$avgRating", 2] },
+      },
+    },
+  ]);
+
+  return res.status(200).json({
+    success: true,
+    providerRating: {
+      avgRating: stats?.avgRating ?? 0,
+      ratingCount: stats?.ratingCount ?? 0,
+    },
+  });
+});
+
+export const getBorrowerRatingSummary = asyncHandler(async (req, res) => {
+  const borrowerId = req.params.id;
+
+  if (!mongoose.Types.ObjectId.isValid(borrowerId)) {
+    return res.status(400).json({ success: false, message: "Invalid user id" });
+  }
+
+  const [stats] = await Review.aggregate([
+    {
+      $match: {
+        targetType: "USER",
+        status: "PUBLISHED",
+        reviewee: new mongoose.Types.ObjectId(borrowerId),
+      },
+    },
+    {
+      $group: {
+        _id: "$reviewee",
+        ratingCount: { $sum: 1 },
+        avgRating: { $avg: "$rating" },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        ratingCount: 1,
+        avgRating: { $round: ["$avgRating", 2] },
+      },
+    },
+  ]);
+
+  return res.status(200).json({
+    success: true,
+    borrowerRating: {
+      avgRating: stats?.avgRating ?? 0,
+      ratingCount: stats?.ratingCount ?? 0,
+    },
+  });
+});
+
+export { register, login, verifyOtp, logout, profile };
