@@ -30,6 +30,6 @@ router.post(
   addPhoto
 );
 router.post("/update/:id/remove-photo", protect, removePhoto);
-router.get("/listings/:id/reviews", getListingReviews);
+router.get("/:id/reviews", getListingReviews);
 
 export default router;
