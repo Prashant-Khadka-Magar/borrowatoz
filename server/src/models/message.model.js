@@ -1,4 +1,6 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
+
+const { Schema } = mongoose;
 
 const messageSchema = new Schema(
   {
@@ -16,28 +18,22 @@ const messageSchema = new Schema(
       index: true,
     },
 
-    type: {
-      type: String,
-      enum: ["TEXT", "SYSTEM"],
-      default: "TEXT",
+    receiver: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
       index: true,
     },
 
     text: {
       type: String,
+      required: true,
       trim: true,
-      maxlength: 2000,
-      required: function () {
-        return this.type === "TEXT";
-      },
+      maxlength: 1000,
     },
 
-    // Read receipts: store who has read it
-    readBy: {
-      type: [{ type: Schema.Types.ObjectId, ref: "User" }],
-      default: [],
-      index: true,
-    },
+    isRead: { type: Boolean, default: false, index: true },
+    readAt: { type: Date, default: null },
   },
   { timestamps: true }
 );
