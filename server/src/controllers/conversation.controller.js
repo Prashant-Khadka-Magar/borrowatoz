@@ -7,7 +7,7 @@ const toObjectId = (id) => new mongoose.Types.ObjectId(id);
 
 const getMyConversations = asyncHandler(async (req, res) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?._id;
     if (!userId) {
       return res
         .status(401)
@@ -49,7 +49,7 @@ const getMyConversations = asyncHandler(async (req, res) => {
 
 const getOrCreateConversationFromListing = asyncHandler(async (req, res) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?._id;
     if (!userId) {
       return res
         .status(401)
