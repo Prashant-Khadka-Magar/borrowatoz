@@ -28,6 +28,7 @@ const authSlice = createSlice({
       .addMatcher(authApi.endpoints.logout.matchFulfilled, (state) => {
         state.user = null;
         state.isAuthenticated = false;
+        state.loading = false;
       });
   },
 });

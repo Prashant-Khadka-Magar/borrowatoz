@@ -25,6 +25,6 @@ router.get("/:id", protect, getConversationById);
 //Message
 router.get("/:id/messages", protect, getConversationMessages);
 router.post("/:id/messages", protect, sendMessage);
-router.patch("/:id//read", protect, markConversationRead);
+router.patch("/:id/read", protect, markConversationRead);
 
 export default router;

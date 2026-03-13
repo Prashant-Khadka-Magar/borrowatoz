@@ -4,9 +4,7 @@ export default function Card() {
       {/* Image */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-gray-100">
         <div className="h-full w-full bg-gradient-to-br from-gray-100 to-gray-200" />
-        <span className="absolute left-3 top-3 inline-flex items-center rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700 ring-1 ring-blue-200">
-          Service
-        </span>
+        
         <button
           type="button"
           className="absolute right-3 top-3 rounded-full bg-white/90 p-2 shadow-sm ring-1 ring-gray-200 backdrop-blur transition hover:bg-white"
@@ -55,18 +53,7 @@ export default function Card() {
           <span className="text-gray-500">(126 reviews)</span>
         </div>
 
-        {/* Tags */}
-        <div className="mt-4 flex flex-wrap gap-2">
-          <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
-            Verified
-          </span>
-          <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
-            Instant booking
-          </span>
-          <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
-            Top rated
-          </span>
-        </div>
+      
 
         {/* CTA */}
         <div className="mt-4 flex items-center gap-2">

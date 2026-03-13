@@ -22,8 +22,15 @@ const conversationSchema = new Schema(
   { timestamps: true },
 );
 
+conversationSchema.pre("validate", function () {
+  if (Array.isArray(this.participants) && this.participants.length === 2) {
+    const [a, b] = this.participants.map((id) => id.toString()).sort();
+    this.participants = [a, b].map((id) => new mongoose.Types.ObjectId(id));
+    this.participantsHash = `${a}_${b}`;
+  }
+});
 
-
-conversationSchema.index({ participants: 1, listing: 1 }, { unique: true });
+// One conversation per (pair + listing)
+conversationSchema.index({ participantsHash: 1, listing: 1 }, { unique: true });
 
 export const Conversation = mongoose.model("Conversation", conversationSchema);

@@ -82,10 +82,12 @@ const getOrCreateConversationFromListing = asyncHandler(async (req, res) => {
       });
     }
 
-    let conversation = Conversation.findOne({
+    let conversation = await Conversation.findOne({
       listing: toObjectId(listingId),
       participants: { $all: [toObjectId(userId), toObjectId(ownerId)] },
     });
+
+    
 
     if (!conversation) {
       conversation = await Conversation.create({

@@ -1,5 +1,5 @@
 .env*
 todo.todo
-ideas.md
-file-structure.sh
-newIdeaslearnt.md
+
+*.md
+!README.md

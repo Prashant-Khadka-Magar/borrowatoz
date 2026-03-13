@@ -1,7 +1,12 @@
-"use client"
+"use client";
 
-import { StoreProvider } from "@/state/redux"
+import AuthLoader from "@/components/AuthLoader";
+import { StoreProvider } from "@/state/redux";
 
-export default function Providers({ children}){
-    return <StoreProvider>{children}</StoreProvider>
+export default function Providers({ children }) {
+  return (
+    <StoreProvider>
+      <AuthLoader>{children}</AuthLoader>
+    </StoreProvider>
+  );
 }
